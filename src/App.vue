@@ -48,7 +48,7 @@ a{
 }
 #app {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-  min-width: 1160px;
+  min-width: 1500px;
   overflow: hidden;
 }
 .clear{

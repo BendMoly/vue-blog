@@ -32,7 +32,7 @@ html,body{
     left: 0;
     /*background: #ccc;*/
     overflow: hidden;
-    min-width: 1160px;
+    min-width: 1500px;
 }
 .admin-nav{
     position: absolute;

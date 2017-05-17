@@ -10,6 +10,12 @@ import routes from './routeConfig.js'
 // 引入vuex状态控制
 import stores from './store/store'
 
+import {
+    imgData
+} from './util.js'
+
+Vue.prototype.imgData = imgData;
+
 // 引用elementUI
 Vue.use(ElementUI)
 // 引用VueRouter
