@@ -32,4 +32,8 @@ export default {
 h5{
     text-align: center;
 }
+a{
+    color: #fff;
+    text-decoration: none;
+}
 </style>

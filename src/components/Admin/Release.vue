@@ -148,12 +148,12 @@ export default {
 }
 .content{
     float: left;
-    width: 800px;
+    width: 55%;
     height: 642px;
 }
 .html{
     float: left;
-    width: 390px;
+    width: 42%;
     height: 640px;
     margin-left: 10px;
     padding: 0 5px;

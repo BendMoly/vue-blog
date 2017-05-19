@@ -242,16 +242,14 @@ import echarts from 'echarts'
   margin-top: 20px;
 }
 #articlelib {
-  float: left;
-  width: 68%;
-  max-width: 800px;
+  /*float: left;*/
+  width: 100%;
   height: 600px;
 }
 #tagChart{
   float: left;
-  width: 30%;
+  width: 100%;
   /*min-width: 390px;*/
   height: 600px;
-  margin-left: 20px;
 }
 </style>

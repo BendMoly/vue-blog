@@ -25,17 +25,10 @@ html,body{
     height: 100%;
 }
 .admin-container{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    /*background: #ccc;*/
-    overflow: hidden;
-    min-width: 1500px;
+    min-width: 1160px;
 }
 .admin-nav{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
@@ -43,10 +36,6 @@ html,body{
     background: #324157;
 }
 .admin-content{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 188px;
+    padding-left: 188px;
 }
 </style>
