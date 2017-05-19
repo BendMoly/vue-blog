@@ -11,10 +11,12 @@ import routes from './routeConfig.js'
 import stores from './store/store'
 
 import {
-    imgData
+    imgData,
+    $initHighlight
 } from './util.js'
 
-Vue.prototype.imgData = imgData;
+Vue.prototype.imgData = imgData
+Vue.prototype.$initHighlight = $initHighlight
 
 // 引用elementUI
 Vue.use(ElementUI)

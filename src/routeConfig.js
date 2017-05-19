@@ -8,6 +8,7 @@ import Admin from './components/Admin/Admin.vue'
 import Login from './components/Admin/Login.vue'
 import Dashboard from './components/Admin/Dashboard.vue'
 import AdminArticleList from './components/Admin/ArticleList.vue'
+import Release from './components/Admin/Release.vue'
 
 
 export default {
@@ -39,6 +40,10 @@ export default {
             {
                 path: 'adminarticlelist',
                 component: AdminArticleList
+            },
+            {
+                path: 'release',
+                component: Release
             }
         ]
     },{
