@@ -1,5 +1,6 @@
 <template>
     <div class="release-container">
+        <el-button type="primary">新增栏目</el-button>
         <el-select class="single-select" v-model="value" placeholder="选择所属栏目">
             <el-option
               v-for="item in options"
@@ -67,7 +68,7 @@ export default {
                   value: '选项5',
                   label: '阿茨海默综合征'
             }],
-            value: '',
+            value: 'hello',
             options5: [{
               value: 'HTML',
               label: 'HTML'

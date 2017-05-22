@@ -7,8 +7,7 @@
                 <el-menu-item index="/admin/dashboard">Dashboard</el-menu-item>
                 <el-menu-item index="/admin/adminarticlelist">ArticleList</el-menu-item>
                 <el-menu-item index="/admin/release">Release</el-menu-item>
-                <el-menu-item index="/dashboard">Comment</el-menu-item>
-                <el-menu-item index="/dashboard">Tag</el-menu-item>
+                <el-menu-item index="/admin/comment">Comment</el-menu-item>
                 <el-menu-item index="/dashboard">Logout</el-menu-item>
             </el-menu>
         </el-col>

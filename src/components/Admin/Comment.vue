@@ -14,7 +14,7 @@
             <div class="input-search">
               <el-input placeholder="请输入内容" v-model="input5">
                 <el-select v-model="select" slot="prepend" placeholder="请选择" class="elselect">
-                  <el-option label="关键字" value="1"></el-option>
+                  <el-option label="文章ID" value="1"></el-option>
                   <el-option label="标签" value="2"></el-option>
                 </el-select>
                 <el-button slot="append" icon="search"></el-button>
@@ -25,13 +25,11 @@
             <el-table :data="tableData" stripe style="width: 100%">
                 <el-table-column
                   prop="title"
-                  label="标题"
-                  width="180">
+                  label="标题">
                 </el-table-column>
                 <el-table-column
                   prop="tag"
-                  label="标签"
-                  width="100">
+                  label="标签">
                 </el-table-column>
                 <el-table-column
                   prop="date"
@@ -39,13 +37,14 @@
                   width="150">
                 </el-table-column>
                 <el-table-column
-                  prop="abstract"
-                  label="概要">
+                  prop="address"
+                  label="留言人"
+                  width="200">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
-                  label="地址"
-                  width="180">
+                  prop="status"
+                  label="状态"
+                  width="100">
                 </el-table-column>
                 <el-table-column 
                   prop="oprate"
@@ -54,7 +53,7 @@
                   <template scope="scope">
                     <el-button
                       size="small"
-                      @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                      @click="handleEdit(scope.$index, scope.row)">查看</el-button>
                     <el-button
                       size="small"
                       type="danger"
@@ -67,7 +66,7 @@
             <el-pagination
               small
               layout="prev, pager, next"
-              :total="50">
+              :total="150">
             </el-pagination>
         </div>
     </div>
@@ -110,43 +109,53 @@ export default {
         tableData: [{
           date: '2016-05-02',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          address: '上海市普陀区金沙江路 1518 弄',
+          status: '未读'
         }, {
           date: '2016-05-04',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
+          address: '上海市普陀区金沙江路 1517 弄',
+          status: '未读'
         }, {
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         },{
           date: '2016-05-01',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          status: '未读'
         }, {
           date: '2016-05-03',
           title: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
+          address: '上海市普陀区金沙江路 1516 弄',
+          status: '未读'
         }]
       };
     },

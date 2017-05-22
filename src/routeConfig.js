@@ -9,6 +9,7 @@ import Login from './components/Admin/Login.vue'
 import Dashboard from './components/Admin/Dashboard.vue'
 import AdminArticleList from './components/Admin/ArticleList.vue'
 import Release from './components/Admin/Release.vue'
+import Comment from './components/Admin/Comment.vue'
 
 
 export default {
@@ -44,6 +45,10 @@ export default {
             {
                 path: 'release',
                 component: Release
+            },
+            {
+                path: 'comment',
+                component: Comment
             }
         ]
     },{
