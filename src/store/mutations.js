@@ -2,13 +2,16 @@ import {
     HEAD_SHOW,
     HEAD_HIDE,
     NAV_SHOW,
-    NAV_HIDE
+    NAV_HIDE,
+    LOGIN_SUCCESS,
+    LOGIN_FAIL
 } from './type'
 
 // 状态控制变量
 const state = {
     headShow: true,
-    navShow: true
+    navShow: true,
+    authorized: true
 }
 
 const mutations = {
@@ -24,6 +27,12 @@ const mutations = {
     },
     [NAV_HIDE](state){
         state.navShow = false;
+    },
+    [LOGIN_SUCCESS](state){
+        state.authorized = false;
+    },
+    [LOGIN_FAIL](state){
+        state.authorized = true;
     }
 }
 
@@ -33,6 +42,9 @@ const getters = {
     },
     navShow(state){
         return state.navShow;
+    },
+    authorized(state){
+        return state.authorized
     }
 }
 

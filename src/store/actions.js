@@ -14,5 +14,11 @@ export default {
     },
     HIDE_NAV:({commit})=>{
         commit(types.NAV_HIDE);
+    },
+    SUCCESS_LOGIN:({commit})=>{
+        commit(types.LOGIN_SUCCESS);
+    },
+    FAIL_LOGIN:({commit})=>{
+        commit(types.LOGIN_FAIL);
     }
 }

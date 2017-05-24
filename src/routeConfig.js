@@ -33,6 +33,10 @@ export default {
     },{
         path: '/admin',
         component: Admin,
+        redirect: '/admin/dashboard',
+        meta: {
+            auth: true  //这里设置该路由需要校验
+        },
         children: [
             {
                 path: 'dashboard',

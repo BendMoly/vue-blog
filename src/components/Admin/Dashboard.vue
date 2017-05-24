@@ -24,17 +24,9 @@
                 <span class="info-result">0</span>
               </div>
               
-              <p class="info-title">订阅数</p>
+              <p class="info-title">访问数</p>
             </div>
         </div>
-        <!-- <div>
-            <el-badge :value="12" class="item">
-              <el-button size="small">评论</el-button>
-            </el-badge>
-            <el-badge :value="12" class="item">
-              <el-button size="small">文章数</el-button>
-            </el-badge>
-        </div> -->
         <div class="chart clear">
             <div id="articlelib"></div>
             <div id="tagChart"></div>

@@ -68,7 +68,7 @@ export default {
                   value: '选项5',
                   label: '阿茨海默综合征'
             }],
-            value: 'hello',
+            value: '',
             options5: [{
               value: 'HTML',
               label: 'HTML'
