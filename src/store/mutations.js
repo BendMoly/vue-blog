@@ -11,7 +11,7 @@ import {
 const state = {
     headShow: true,
     navShow: true,
-    authorized: true
+    authorized: false
 }
 
 const mutations = {
@@ -29,10 +29,10 @@ const mutations = {
         state.navShow = false;
     },
     [LOGIN_SUCCESS](state){
-        state.authorized = false;
+        state.authorized = true;
     },
     [LOGIN_FAIL](state){
-        state.authorized = true;
+        state.authorized = false;
     }
 }
 

@@ -29,6 +29,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(m => m.meta.auth)) {
         // 对路由进行验证
         if(stores.getters.authorized) { // 已经登陆
+            console.log(stores.getters.authorized);
             next()
         }else{
             // 未登录,跳转到登陆页面，并且带上 将要去的地址，方便登陆后跳转。
