@@ -8,8 +8,9 @@
                 <el-menu-item index="/admin/adminarticlelist">ArticleList</el-menu-item>
                 <el-menu-item index="/admin/release">Release</el-menu-item>
                 <el-menu-item index="/admin/comment">Comment</el-menu-item>
-                <el-menu-item index="/admin" @click="logout">Logout</el-menu-item>
+                <el-menu-item index="/login" @click="logout">Logout</el-menu-item>
             </el-menu>
+            <!-- <div class="logout" @click="logout">Logout</div> -->
         </el-col>
     </div>
 </template>
@@ -25,6 +26,8 @@ export default {
       },
       logout(){
         this.$store.dispatch('FAIL_LOGIN');
+        // this.$router.push({path:'/admin/dashboard'})
+        // console.log("logout");
       }
     }
 }
@@ -37,5 +40,20 @@ h5{
 a{
     color: #fff;
     text-decoration: none;
+}
+.logout{
+    height: 56px;
+    line-height: 56px;
+    font-size: 14px;
+    color: #bfcbd9;
+    padding: 0 20px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .3s,background-color .3s,color .3s;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+.logout:hover{
+    color: #20a0ff;
 }
 </style>

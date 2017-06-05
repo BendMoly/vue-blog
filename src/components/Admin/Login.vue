@@ -41,7 +41,11 @@ export default {
       onSubmit() {
         console.log(this.$route.query.referrer);
         this.$store.dispatch("SUCCESS_LOGIN");
-        this.$router.push({path: this.$route.query.referrer});
+        if (this.$route.query.referrer) {
+          this.$router.push({path: this.$route.query.referrer});
+        }else{
+          this.$router.push({path: '/admin/dashboard'});
+        }
       }
     }
 }
