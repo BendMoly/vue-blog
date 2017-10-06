@@ -8,18 +8,23 @@
                 </div>
               </el-col>
               <el-col :span="24">
-                <div class="grid-content bg-purple-dark time">
+                <div class="grid-content bg-purple-dark">
                     Posted on {{item.time}}
+                </div>
+              </el-col>
+               <el-col :span="24">
+                <div class="grid-content bg-purple-dark tag">
+                    <el-tag type="success">{{item.column}}</el-tag> <el-tag type="gray" v-for="tag in item.tag">{{tag}}</el-tag>
                 </div>
               </el-col>
               <el-col :span="24">
                 <div class="grid-content bg-purple-dark article">
-                    {{item.article}}
+                    {{item.summary}}
                 </div>
               </el-col>
               <el-col :span="24">
                 <div class="grid-content bg-purple-dark">
-                    <router-link :to="'/home/'+item.label+'/'+item.index">
+                    <router-link :to="'/home/'+item.column+'/'+item.idx">
                         <el-button>Read More ></el-button>
                     </router-link>
                 </div>
@@ -31,9 +36,9 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
-              :page-size="100"
+              :page-size="10"
               layout="total, prev, pager, next"
-              :total="1000">
+              :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -41,45 +46,59 @@
 
 <script>
     export default {
+        mounted(){
+          this.$http.post('http://localhost:8090/api/articlesList').then(res => {
+            console.log(res);
+            if(res.status == 200){
+                this.articles = res.data.data;
+                this.totalPage = res.data.totalPage;
+            }
+
+          },err => {
+            console.log(err);
+          })
+        },
         data(){
             return {
-                articles: [
-                    {
-                        'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                        'time': '24th January 2015',
-                        'index': 1,
-                        'label': 'javascript',
-                        'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                    },
-                    {
-                        'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                        'time': '24th January 2015',
-                        'index': 2,
-                        'label': 'javascript',
-                        'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                    },
-                    {
-                        'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                        'time': '24th January 2015',
-                        'index': 3,
-                        'label': 'javascript',
-                        'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                    },
-                    {
-                        'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                        'time': '24th January 2015',
-                        'index': 4,
-                        'label': 'javascript',
-                        'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                    },
-                    {
-                        'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                        'time': '24th January 2015',
-                        'index': 5,
-                        'label': 'javascript',
-                        'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                    }
-                ],
+                articles: null,
+                totalPage: null,
+                // articles: [
+                //     {
+                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
+                //         'time': '24th January 2015',
+                //         'index': 1,
+                //         'label': 'javascript',
+                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
+                //     },
+                //     {
+                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
+                //         'time': '24th January 2015',
+                //         'index': 2,
+                //         'label': 'javascript',
+                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
+                //     },
+                //     {
+                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
+                //         'time': '24th January 2015',
+                //         'index': 3,
+                //         'label': 'javascript',
+                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
+                //     },
+                //     {
+                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
+                //         'time': '24th January 2015',
+                //         'index': 4,
+                //         'label': 'javascript',
+                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
+                //     },
+                //     {
+                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
+                //         'time': '24th January 2015',
+                //         'index': 5,
+                //         'label': 'javascript',
+                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
+                //     }
+                // ],
                 currentPage: 1
             }
         },
@@ -97,6 +116,9 @@
 </script>
 
 <style scoped>
+.el-tag{
+    margin-right: 5px;
+}
 .article-container{
     border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
@@ -105,7 +127,8 @@
 h2{
     margin-bottom: 0;
 }
-.time{
+.tag{
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 .article{

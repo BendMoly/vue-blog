@@ -10,6 +10,12 @@ import routes from './routeConfig.js'
 // 引入vuex状态控制
 import stores from './store/store'
 
+// 引入axios请求
+import axios from 'axios'
+axios.defaults.timeout = 5000;                        //响应时间
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+Vue.prototype.$http = axios
+
 import {
     imgData,
     $initHighlight
@@ -32,7 +38,7 @@ router.beforeEach((to, from, next) => {
             next()
         }else{
             // 未登录,跳转到登陆页面，并且带上 将要去的地址，方便登陆后跳转。
-            next({path:'/login',query:{ referrer: to.fullPath } })  
+            next({path:'/login',query:{ referrer: to.fullPath } })
         }
     }else{
         next();

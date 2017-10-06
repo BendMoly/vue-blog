@@ -3,25 +3,46 @@
         <el-row>
           <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <h2>Curabitur nec nisl odio. Mauris vehicula at nunc id posuere</h2>
-                <p>Posted on 2017-03-30 16:17:08</p>
+                <h2>{{title}}</h2>
+                <p>Posted on {{time}}</p>
               </div>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-tag type="gray">标签二</el-tag>
+                <el-tag type="success">{{column}}</el-tag> <el-tag type="gray" v-for="tag in tags">{{tag}}</el-tag>
               </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="content">
           <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.</p>
+                <!-- 稍后要将文章内容作为一个html采用highlight进行编译，所以这里应该要做一个内容的嵌套 -->
+                {{content}}
               </div>
           </el-col>
         </el-row>
+        <el-row v-show="review">
+          <el-row class="reviewarea">Review area</el-row>
+          <el-row class="review-list" v-for="item in reviewList">
+            <el-row class="review-question">
+              <el-col class="review-name" :span="4">
+                <el-row>{{item.nickName}}</el-row>
+                <el-row>{{item.questionTime}}</el-row>  
+              </el-col>
+              <el-col :span="20">{{item.question}}</el-col>
+            </el-row>
+            <el-row v-show="!!item.ask" class="review-ask">
+              <el-col class="review-name" :span="4" :offset="1">
+                <el-row>author</el-row>
+                <el-row>{{item.askTime}}</el-row>  
+              </el-col>
+              <el-col :span="19">{{item.ask}}</el-col>
+            </el-row>
+          </el-row>
+        </el-row>
+        
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="昵称">
             <el-input v-model="form.name"></el-input>
@@ -40,6 +61,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
     data() {
       return {
@@ -47,7 +69,49 @@ export default {
           name: '',
           contact: '',
           desc: ''
+        },
+        title: '',
+        time: '',
+        column: '',
+        tags: [],
+        content: '',
+        review: false,
+        reviewList: []
+      }
+    },
+    created(){
+      console.log(this.$route)
+      this.$http.post('http://localhost:8090/api/article', qs.stringify({
+        'column': this.$route.params.index,
+        'idx': Number(this.$route.params.id)
+      })).then(res => {
+        if(res.status == 200){
+          // 将获取到的文章详情内容赋值给组件参数
+          this.article = res.data.data;
+          this.title = res.data.data.title;
+          this.time = res.data.data.time;
+          this.column = res.data.data.column;
+          this.tags = res.data.data.tag;
+          this.content = res.data.data.content;
+
+          // 判断该文章是否有评论，有的话则请求评论内容
+          if(res.data.data.review){
+            this.$http.post('http://localhost:8090/api/review').then(res => {
+              if(res.status == 200){
+                // 将页面的评论元素打开
+                this.review = true;
+                // 赋值评论列表
+                this.reviewList = res.data.data;
+              }
+            })
+          }
+
         }
+      })
+    },
+    watch: {
+      $route(to){
+        console.log(to);
       }
     },
     methods: {
@@ -59,6 +123,16 @@ export default {
               type: 'info',
               message: '提交成功'
             });
+            let date = new Date();
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+            let msg = {
+              'nickName': this.form.name,
+              'questionTime': `${year}-${month}-${day}`,
+              'question': this.form.desc
+            };
+            this.reviewList.push(msg);
           }
         });
       }
@@ -67,7 +141,37 @@ export default {
 </script>
 
 <style scoped>
+.el-tag{
+    margin-right: 5px;
+}
 input{
     width: 100px !important;
+}
+.content{
+  margin: 10px 0;
+}
+.reviewarea{
+  color: #ffffff;
+  line-height: 36px;
+  min-height: 36px;
+  background: #20a0ff;
+  border-radius: 5px;
+  padding-left: 20px;
+  margin-bottom: 5px;
+}
+.review-list{
+  background: #ece8e8;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+.review-question{
+  padding: 5px 0;
+  border-bottom: 2px solid #f8f8f8;
+}
+.review-ask{
+  padding: 5px 0;
+}
+.review-name{
+  padding-left: 20px;
 }
 </style>

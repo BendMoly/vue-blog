@@ -9,7 +9,7 @@
               <el-col :span="8">
                 <div class="personal-img grid-content bg-purple">
                   <div>
-                    <img src="../../assets/me.jpg" alt="">
+                    <img src="../../assets/personal.png" alt="">
                   </div>
                 </div>
               </el-col>
@@ -19,7 +19,7 @@
                     <h1>MolyCHN`s personal blogger</h1>
                     <p>All my learning experience will be summarized here, including programming, language, painting and writing</p>
                     <h2>Contact me</h2>
-                    <p>GitHub: <a href="https://github.com/BendMoly">https://github.com/BendMoly</a></p>
+                    <p>GitHub: <a class="github" href="https://github.com/BendMoly">https://github.com/BendMoly</a></p>
                     <p>Email: ssomkhyy@qq.com</p>
                     <p>QQ: 170849261</p>
                   </div>
@@ -73,5 +73,9 @@
   position: absolute;
   top: 25px;
   left: 75px;
+}
+.github{
+  color: #ffffff;
+  text-decoration: none;
 }
 </style>

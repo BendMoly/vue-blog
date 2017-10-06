@@ -14,14 +14,14 @@ export default {
     }
   },
   watch: {
-    $route(to){
-        var id;
-        if (to.params.id) {
-          console.log(to.params.id);
-          id = to.params.id;
-        }
-        this.headChange(id);
-    }
+    // $route(to){
+    //     var id;
+    //     if (to.params.id) {
+    //       console.log(to.params.id);
+    //       id = to.params.id;
+    //     }
+    //     this.headChange(id);
+    // }
   },
   methods: {
     headChange(id){
@@ -44,6 +44,7 @@ html,body{
 }
 #app {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  min-width: 1160px;;
   overflow: hidden;
 }
 .clear{
