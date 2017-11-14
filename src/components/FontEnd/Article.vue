@@ -17,33 +17,32 @@
         </el-row>
         <el-row class="content">
           <el-col :span="24">
-              <div class="grid-content bg-purple-dark">
-                <!-- 稍后要将文章内容作为一个html采用highlight进行编译，所以这里应该要做一个内容的嵌套 -->
-                {{content}}
-              </div>
+
+              <div v-html="html"></div>
           </el-col>
         </el-row>
-        <el-row v-show="review">
+
+        <!-- <el-row v-show="review">
           <el-row class="reviewarea">Review area</el-row>
           <el-row class="review-list" v-for="item in reviewList">
             <el-row class="review-question">
               <el-col class="review-name" :span="4">
                 <el-row>{{item.nickName}}</el-row>
-                <el-row>{{item.questionTime}}</el-row>  
+                <el-row>{{item.questionTime}}</el-row>
               </el-col>
               <el-col :span="20">{{item.question}}</el-col>
             </el-row>
             <el-row v-show="!!item.ask" class="review-ask">
               <el-col class="review-name" :span="4" :offset="1">
                 <el-row>author</el-row>
-                <el-row>{{item.askTime}}</el-row>  
+                <el-row>{{item.askTime}}</el-row>
               </el-col>
               <el-col :span="19">{{item.ask}}</el-col>
             </el-row>
           </el-row>
-        </el-row>
-        
-        <el-form ref="form" :model="form" label-width="80px">
+        </el-row> -->
+
+        <!-- <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="昵称">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
@@ -56,11 +55,12 @@
           <el-form-item>
             <el-button type="primary" @click="onSubmit">发给站长</el-button>
           </el-form-item>
-        </el-form>
+        </el-form> -->
     </div>
 </template>
 
 <script>
+import marked from 'marked'
 import qs from 'qs'
 export default {
     data() {
@@ -76,18 +76,18 @@ export default {
         tags: [],
         content: '',
         review: false,
-        reviewList: []
+        reviewList: [],
+        html: ''
       }
     },
     created(){
       console.log(this.$route)
-      this.$http.post('http://localhost:8090/api/article', qs.stringify({
+      this.$http.post(this.hostRequest.article_api, qs.stringify({
         'column': this.$route.params.index,
         'idx': Number(this.$route.params.id)
       })).then(res => {
         if(res.status == 200){
           // 将获取到的文章详情内容赋值给组件参数
-          this.article = res.data.data;
           this.title = res.data.data.title;
           this.time = res.data.data.time;
           this.column = res.data.data.column;
@@ -95,8 +95,8 @@ export default {
           this.content = res.data.data.content;
 
           // 判断该文章是否有评论，有的话则请求评论内容
-          if(res.data.data.review){
-            this.$http.post('http://localhost:8090/api/review').then(res => {
+          if(res.data.data.review == 'true'){
+            this.$http.post(this.hostRequest.review_api).then(res => {
               if(res.status == 200){
                 // 将页面的评论元素打开
                 this.review = true;
@@ -112,7 +112,10 @@ export default {
     watch: {
       $route(to){
         console.log(to);
-      }
+      },
+      content:{handler(curval,oldVal){
+          this.markedToHTML(curval);
+      },deep:true}
     },
     methods: {
       onSubmit() {
@@ -135,6 +138,39 @@ export default {
             this.reviewList.push(msg);
           }
         });
+      },
+      markedToHTML(ctx){
+          var rendererMD = new marked.Renderer();
+          marked.setOptions({
+            renderer: rendererMD,
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+          });
+          marked.setOptions({
+              highlight: function (code) {
+                  return hljs.highlightAuto(code).value;
+              }
+          });
+          this.html = marked(ctx);
+          this.$nextTick(() =>{
+              var tag = document.querySelectorAll("code");
+              var img = document.querySelectorAll("img");
+              for(var i = 0; i < tag.length; i++){
+                  if (tag[i].className.indexOf('hljs') == -1) {
+                      tag[i].className += ' hljs';
+                  };
+                  console.log(tag[i].className);
+              }
+              for(var j = 0; j < img.length; j++){
+                  img[j].style.width = '100%';
+              }
+              // document.querySelectorAll("code")[0].className += ' hljs';
+          })
       }
     }
 }

@@ -4,7 +4,7 @@
             <label>条件检索</label>
             <div class="block">
                 <el-date-picker
-                  v-model="value7"
+                  v-model="timeSearch"
                   type="daterange"
                   align="right"
                   placeholder="按日期范围检索"
@@ -12,12 +12,12 @@
                 </el-date-picker>
             </div>
             <div class="input-search">
-              <el-input placeholder="请输入内容" v-model="input5">
+              <el-input placeholder="请输入内容" v-model="searchText">
                 <el-select v-model="select" slot="prepend" placeholder="请选择" class="elselect">
-                  <el-option label="关键字" value="1"></el-option>
-                  <el-option label="标签" value="2"></el-option>
+                  <el-option label="标题" value="title"></el-option>
+                  <el-option label="标签" value="column"></el-option>
                 </el-select>
-                <el-button slot="append" icon="search"></el-button>
+                <el-button slot="append" icon="search" @click="searchBtn"></el-button>
               </el-input>
             </div>
         </div>
@@ -25,29 +25,19 @@
             <el-table :data="tableData" stripe style="width: 100%">
                 <el-table-column
                   prop="title"
-                  label="标题"
-                  width="180">
+                  label="标题">
                 </el-table-column>
                 <el-table-column
-                  prop="tag"
+                  prop="column"
                   label="标签"
-                  width="100">
+                  width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="date"
+                  prop="time"
                   label="日期"
                   width="150">
                 </el-table-column>
                 <el-table-column
-                  prop="abstract"
-                  label="概要">
-                </el-table-column>
-                <el-table-column
-                  prop="address"
-                  label="地址"
-                  width="180">
-                </el-table-column>
-                <el-table-column 
                   prop="oprate"
                   label="操作"
                   width="180">
@@ -67,7 +57,10 @@
             <el-pagination
               small
               layout="prev, pager, next"
-              :total="50">
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-size="10"
+              :total="totalPage">
             </el-pagination>
         </div>
         <el-dialog
@@ -85,7 +78,12 @@
 </template>
 
 <script>
+import qs from 'qs'
+import { dateFormate } from '../../utils/dateFormate'
 export default {
+    mounted(){
+      this.fetchData(this.currentPage);
+    },
     data() {
       return {
         pickerOptions2: {
@@ -115,54 +113,34 @@ export default {
             }
           }]
         },
-        value7: '',
-        input5: '',
+        timeSearch: '',
+        timeSearchFormate: [],
+        searchText: '',
         select: '',
-        tableData: [{
-          date: '2016-05-02',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },{
-          date: '2016-05-01',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          title: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        dialogVisible: false
+        tableData: [],
+        dialogVisible: false,
+        currentPage: 1,
+        totalPage: 1
       }
     },
     methods: {
+      fetchData(idx){
+        this.$http.post(this.hostRequest.articleList_backup, qs.stringify({
+          'select': this.select ? this.select : '',
+          'text': this.searchText ? this.searchText : '',
+          'currentPage': idx
+        })).then(
+          res => {
+            if(res.status == 200){
+              if(res.data.code == '40001'){
+                this.tableData = res.data.data;
+                // this.currentPage = Number(res.data.currrentPage);
+                this.totalPage = res.data.totalPage;
+              }
+            }
+          }
+        )
+      },
       handleEdit(index, row) {
         console.log(index, row);
       },
@@ -173,6 +151,54 @@ export default {
             done();
           })
           .catch(_ => {});
+      },
+      //currentPage 改变时会触发 cb->当前页currentPage
+      handleCurrentChange(val){
+        this.currentPage = val;
+        if(this.timeSearch){
+          this.timesearch(this.timeSearchFormate[0], this.timeSearchFormate[1], val);
+        }else{
+          this.fetchData(val);
+        }
+
+      },
+      searchBtn(){
+        this.fetchData(1);
+      },
+      timesearch(pastTime, newTime, idx){
+        this.$http.post(this.hostRequest.articleListTimeSearch, qs.stringify({
+          pastTime: pastTime,
+          newTime: newTime,
+          currentPage: idx
+        })).then(res => {
+          if(res.status == 200){
+              if(res.data.code == '40001'){
+                this.tableData = res.data.data;
+                // this.currentPage = Number(res.data.currrentPage);
+                this.totalPage = res.data.totalPage;
+              }
+            }
+        })
+      }
+    },
+    watch: {
+      timeSearch: {
+        handler(newVal, oldVal){
+          console.log(newVal);
+          if(newVal[0]){
+            console.log(newVal[0]);
+            let newDate = dateFormate(newVal[1]);
+            console.log(newDate);
+            console.log('in');
+            this.timeSearchFormate[0] = dateFormate(newVal[0]);
+            this.timeSearchFormate[1] = dateFormate(newVal[1]);
+            this.timesearch(dateFormate(newVal[0]), dateFormate(newVal[1]), 1);
+          }else{
+            console.log('out');
+            this.fetchData(1);
+          }
+        },
+        deep: true
       }
     }
 }

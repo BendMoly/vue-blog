@@ -24,7 +24,7 @@
               </el-col>
               <el-col :span="24">
                 <div class="grid-content bg-purple-dark">
-                    <router-link :to="'/home/'+item.column+'/'+item.idx">
+                    <router-link :to="'/home/'+item.column+'/'+item.uuid">
                         <el-button>Read More ></el-button>
                     </router-link>
                 </div>
@@ -45,74 +45,52 @@
 </template>
 
 <script>
-    export default {
-        mounted(){
-          this.$http.post('http://localhost:8090/api/articlesList').then(res => {
-            console.log(res);
-            if(res.status == 200){
-                this.articles = res.data.data;
-                this.totalPage = res.data.totalPage;
-            }
+import qs from 'qs'
+export default {
+    mounted(){
+        this.fetchData(1);
+    },
+    watch: {
+        $route(to){
+            this.fetchData(1);
+        }
+    },
+    data(){
+        return {
+            articles: null,
+            totalPage: null,
+            currentPage: 1
+        }
+    },
+    methods: {
+        // 获取文章列表
+        fetchData(idx){
+            this.$http.post(this.hostRequest.articleList_api, qs.stringify({
+                'column': this.$route.params.index ? this.$route.params.index : '',
+                'currentPage': idx
+            })).then(res => {
+                console.log(this.$route.params);
+                if(res.status == 200){
+                    this.articles = res.data.data;
+                    this.totalPage = res.data.totalPage;
+                }
 
-          },err => {
-            console.log(err);
-          })
+                },err => {
+                console.log(err);
+                }
+            )
         },
-        data(){
-            return {
-                articles: null,
-                totalPage: null,
-                // articles: [
-                //     {
-                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                //         'time': '24th January 2015',
-                //         'index': 1,
-                //         'label': 'javascript',
-                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                //     },
-                //     {
-                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                //         'time': '24th January 2015',
-                //         'index': 2,
-                //         'label': 'javascript',
-                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                //     },
-                //     {
-                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                //         'time': '24th January 2015',
-                //         'index': 3,
-                //         'label': 'javascript',
-                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                //     },
-                //     {
-                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                //         'time': '24th January 2015',
-                //         'index': 4,
-                //         'label': 'javascript',
-                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                //     },
-                //     {
-                //         'title': 'Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.',
-                //         'time': '24th January 2015',
-                //         'index': 5,
-                //         'label': 'javascript',
-                //         'article': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere.'
-                //     }
-                // ],
-                currentPage: 1
-            }
+        //pageSize 改变时触发 cb->每页条数size
+        handleSizeChange: function(){
+
         },
-        methods: {
-            //pageSize 改变时触发 cb->每页条数size
-            handleSizeChange: function(){
-
-            },
-            //currentPage 改变时会触发 cb->当前页currentPage
-            handleCurrentChange: function(){
-
-            }
+        //currentPage 改变时会触发 cb->当前页currentPage
+        handleCurrentChange(val){
+            this.currentPage = val;
+            this.fetchData(val);
         }
     }
+}
 </script>
 
 <style scoped>
