@@ -14,6 +14,28 @@ import stores from './store/store'
 import axios from 'axios'
 axios.defaults.timeout = 5000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+// axios http 请求拦截设置
+// axios.interceptors.request.use(config => {
+
+// })
+// axios http 响应拦截设置
+// axios.interceptors.response.use(
+//     response => {
+//         console.log(response);
+//         return response;
+//     },
+//     err => {
+//         console.log(err);
+//         if(err.response.status == 403){
+//             stores.commit('LOGIN_FAIL');
+//             router.replace({
+//                 path: '/login',
+//                 query:{ referrer: to.fullPath }
+//             })
+//         }
+//         return Promise.reject(err.response.data)   // 返回接口返回的错误信息
+//     }
+// )
 Vue.prototype.$http = axios
 
 import {
@@ -23,6 +45,20 @@ import {
 
 Vue.prototype.imgData = imgData
 Vue.prototype.$initHighlight = $initHighlight
+
+import { hostConfig } from './utils/host.config'
+import { urlList } from './utils/url.config'
+Vue.prototype.hostRequest = (function(config, list){
+  var obj = {};
+  for (var key in list) {
+      if (list.hasOwnProperty(key)) {
+          obj[key] = config.host + list[key]
+      }
+  }
+  console.log(obj);
+  return obj;
+})(hostConfig, urlList)
+
 
 // 引用elementUI
 Vue.use(ElementUI)
