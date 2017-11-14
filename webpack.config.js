@@ -1,6 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
 
+var hostConfig = require('./src/utils/host');
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -57,6 +59,7 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === 'production') {
+  hostConfig('production');
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
@@ -75,4 +78,6 @@ if (process.env.NODE_ENV === 'production') {
       minimize: true
     })
   ])
+} else {
+  hostConfig('dev');
 }
