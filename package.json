@@ -1,7 +1,7 @@
 {
   "name": "vue-blog",
   "description": "A blog in Vue.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "moly",
   "private": true,
   "scripts": {
