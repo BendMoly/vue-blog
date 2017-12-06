@@ -65,10 +65,10 @@ export default {
     methods: {
         // 获取文章列表
         fetchData(idx){
-            this.$http.post(this.hostRequest.articleList_api, qs.stringify({
+            this.$http.post(this.hostRequest.articleList_api, {
                 'column': this.$route.params.index ? this.$route.params.index : '',
                 'currentPage': idx
-            })).then(res => {
+            }).then(res => {
                 console.log(this.$route.params);
                 if(res.status == 200){
                     this.articles = res.data.data;

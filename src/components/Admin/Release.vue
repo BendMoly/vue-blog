@@ -66,7 +66,7 @@ export default {
         this.$http.post(this.hostRequest.checkCatalogs_backup).then(
             res => {
                 if(res.status == 200){
-                    this.catalogs = res.data;
+                    this.catalogs = res.data.data;
                 }
             }
         )
@@ -106,9 +106,9 @@ export default {
 
         catalog:{
             handler(curval, oldVal){
-                this.$http.post(this.hostRequest.checkColumns_backup, qs.stringify({
+                this.$http.post(this.hostRequest.checkColumns_backup, {
                     column: curval
-                })).then(
+                }).then(
                     res => {
                         if(res.status == 200){
                             if(res.data.code == '40001'){
@@ -122,9 +122,9 @@ export default {
 
         column:{
             handler(curval, oldVal){
-                this.$http.post(this.hostRequest.checkTags_backup, qs.stringify({
+                this.$http.post(this.hostRequest.checkTags_backup, {
                     tag: curval
-                })).then(
+                }).then(
                     res => {
                         if(res.status == 200){
                             if(res.data.code == '40001'){
@@ -149,6 +149,7 @@ export default {
                         continue;
                     }
                 }
+                console.log(result);
                 this.diff = result;
             }
         }
@@ -205,10 +206,10 @@ export default {
                     instance.confirmButtonText = '执行中...';
 
                     // 更新该栏目下的新标签
-                    that.$http.post(this.hostRequest.updateTags_backup, qs.stringify({
+                    that.$http.post(this.hostRequest.updateTags_backup, {
                         column: that.column,
                         tags: that.diff
-                    })).then(res => {
+                    }).then(res => {
                         if(res.status == 200){
                             console.log('插入成功');
                             if(res.data.code == '40001'){
@@ -217,13 +218,13 @@ export default {
                                 // 先将二级标签格式化为数据库格式
                                 var newTag = that.tag.join(',');
                                 // 向服务器发送请求
-                                that.$http.post(this.hostRequest.release_backup, qs.stringify({
+                                that.$http.post(this.hostRequest.release_backup, {
                                     title: that.title,
                                     summary: that.summary,
                                     content: that.content,
                                     column: that.column,
                                     tags: newTag
-                                })).then(
+                                }).then(
                                     res => {
                                         if(res.status == 200){
                                             if(res.data.code == '40001'){

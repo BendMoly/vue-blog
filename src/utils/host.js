@@ -3,7 +3,7 @@ module.exports =  function(env) {
     if (env == 'dev') {
         host = "'http://localhost:8081'";
     } else {
-        host = "'.'"
+        host = "'.'";
     }
 
     var fileData = `export let hostConfig = {

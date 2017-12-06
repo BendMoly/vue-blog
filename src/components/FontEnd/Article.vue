@@ -82,10 +82,10 @@ export default {
     },
     created(){
       console.log(this.$route)
-      this.$http.post(this.hostRequest.article_api, qs.stringify({
+      this.$http.post(this.hostRequest.article_api, {
         'column': this.$route.params.index,
         'idx': Number(this.$route.params.id)
-      })).then(res => {
+      }).then(res => {
         if(res.status == 200){
           // 将获取到的文章详情内容赋值给组件参数
           this.title = res.data.data.title;

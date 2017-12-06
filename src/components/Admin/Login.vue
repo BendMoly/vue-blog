@@ -9,9 +9,6 @@
                   <el-form-item label="Password">
                     <el-input v-model="form.password" type="password"></el-input>
                   </el-form-item>
-                  <el-form-item label="Remember">
-                    <el-switch on-text="" off-text="" v-model="form.remember"></el-switch>
-                  </el-form-item>
                     <el-button type="primary" @click="onSubmit">登录</el-button>
                     <el-button>取消</el-button>
                   </el-form-item>
@@ -30,20 +27,18 @@ export default {
           name: '',
           password: '',
           remember: false
-          // type: [],
         }
       }
     },
     methods: {
       onSubmit() {
-        this.$http.post(this.hostRequest.login_api, qs.stringify({
+        this.$http.post(this.hostRequest.login_api, {
           name: this.form.name,
           password: this.form.password
-        })).then(res => {
-          console.log(res);
+        }).then(res => {
           if(res.status == 200){
             if(res.data.code == '40001'){
-              this.$store.dispatch("SUCCESS_LOGIN");
+              // this.$store.dispatch("SUCCESS_LOGIN");
               if (this.$route.query.referrer) {
                 this.$router.push({path: this.$route.query.referrer});
               }else{
@@ -52,26 +47,7 @@ export default {
             }
           }
         })
-        // console.log(this.$route.query.referrer);
-
-        // this.$store.dispatch("SUCCESS_LOGIN");
-        // if (this.$route.query.referrer) {
-        //   this.$router.push({path: this.$route.query.referrer});
-        // }else{
-        //   this.$router.push({path: '/admin/dashboard'});
-        // }
       }
-      // onTest(){
-      //   this.$http.post('http://localhost:8090/api/backup/articlesList', qs.stringify({
-      //       'column': 'javascript',
-      //       'currentPage': 1
-      //   })).then(res => {
-      //       console.log(res);
-      //       },err => {
-      //       console.log(err);
-      //       }
-      //   )
-      // }
     }
 }
 </script>

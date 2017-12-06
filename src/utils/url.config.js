@@ -1,7 +1,7 @@
 export let urlList = {
   'articleList_backup': '/backup/articleList',
   'articleListTimeSearch_backup': '/backup/articleListTimeSearch',
-  'login_api': '/api/login',
+  'login_api': '/backup/login',
   'checkCatalogs_backup': '/backup/checkCatalogs',
   'checkColumns_backup': '/backup/checkColumns',
   'checkTags_backup': '/backup/checkTags',

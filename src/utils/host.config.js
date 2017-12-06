@@ -1,3 +1,3 @@
 export let hostConfig = {
-      host: '.'
+      host: 'http://localhost:8081'
     }

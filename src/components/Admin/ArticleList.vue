@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import qs from 'qs'
 import { dateFormate } from '../../utils/dateFormate'
 export default {
     mounted(){
@@ -125,11 +124,11 @@ export default {
     },
     methods: {
       fetchData(idx){
-        this.$http.post(this.hostRequest.articleList_backup, qs.stringify({
+        this.$http.post(this.hostRequest.articleList_backup, {
           'select': this.select ? this.select : '',
           'text': this.searchText ? this.searchText : '',
           'currentPage': idx
-        })).then(
+        }).then(
           res => {
             if(res.status == 200){
               if(res.data.code == '40001'){
@@ -166,11 +165,11 @@ export default {
         this.fetchData(1);
       },
       timesearch(pastTime, newTime, idx){
-        this.$http.post(this.hostRequest.articleListTimeSearch, qs.stringify({
+        this.$http.post(this.hostRequest.articleListTimeSearch_backup, {
           pastTime: pastTime,
           newTime: newTime,
           currentPage: idx
-        })).then(res => {
+        }).then(res => {
           if(res.status == 200){
               if(res.data.code == '40001'){
                 this.tableData = res.data.data;
@@ -184,17 +183,12 @@ export default {
     watch: {
       timeSearch: {
         handler(newVal, oldVal){
-          console.log(newVal);
           if(newVal[0]){
-            console.log(newVal[0]);
             let newDate = dateFormate(newVal[1]);
-            console.log(newDate);
-            console.log('in');
             this.timeSearchFormate[0] = dateFormate(newVal[0]);
             this.timeSearchFormate[1] = dateFormate(newVal[1]);
             this.timesearch(dateFormate(newVal[0]), dateFormate(newVal[1]), 1);
           }else{
-            console.log('out');
             this.fetchData(1);
           }
         },

@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
 // FontEnd template
 import Home from './components/FontEnd/Home.vue'
 import ArticleList from './components/FontEnd/ArticleList.vue'
@@ -11,8 +14,9 @@ import AdminArticleList from './components/Admin/ArticleList.vue'
 import Release from './components/Admin/Release.vue'
 import Comment from './components/Admin/Comment.vue'
 
+Vue.use(Router)
 
-export default {
+export default new Router({
     routes: [{
         path: '/home',
         component: Home,
@@ -65,4 +69,4 @@ export default {
         path: '*',
         redirect: '/home'
     }]
-}
+});
