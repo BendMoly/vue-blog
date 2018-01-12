@@ -1,6 +1,62 @@
 <template>
     <div class="release-container">
-        <el-button type="primary">新增栏目</el-button>
+      <el-popover
+        class="popover-box"
+        ref="popover"
+        placement="right"
+        width="800"
+        trigger="click"
+        content="xxx">
+          <header class="popover-title">
+            添加新栏目：
+          </header>
+          <el-row :gutter="20">
+            <el-col :span="10">
+              <div class="grid-content">
+                <el-select class="popover-select" v-model="newCatalog1" placeholder="选择所属目录">
+                    <el-option
+                      v-for="item in newCatalogs"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="10">
+              <div class="grid-content">
+                <el-input v-model="newColumn1" placeholder="输入新栏目"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="grid-content">
+                <el-button type="primary" @click="createCatalog(1)">新增</el-button>
+              </div>
+            </el-col>
+          </el-row>
+          <header class="popover-title">
+            添加新目录及栏目：
+          </header>
+          <el-row :gutter="20">
+            <el-col :span="10">
+              <div class="grid-content">
+                <el-input v-model="newCatalog2" placeholder="输入新目录"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="10">
+              <div class="grid-content">
+                <el-input v-model="newColumn2" placeholder="输入新栏目"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="grid-content">
+                <el-button type="primary" @click="createCatalog(2)">新增</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-popover>
+        <el-button v-popover:popover type="primary">新增栏目</el-button>
+
         <el-select class="single-select" v-model="catalog" placeholder="选择所属目录">
             <el-option
               v-for="item in catalogs"
@@ -63,13 +119,7 @@ import marked from 'marked'
 import qs from 'qs'
 export default {
     mounted(){
-        this.$http.post(this.hostRequest.checkCatalogs_backup).then(
-            res => {
-                if(res.status == 200){
-                    this.catalogs = res.data.data;
-                }
-            }
-        )
+        this.fetchCatalog()
     },
     data(){
         return {
@@ -78,6 +128,13 @@ export default {
             // 目录
             catalog: '',
             catalogs: [],
+
+            // 新目录新栏目
+            newCatalog1: '',
+            newCatalog2: '',
+            newCatalogs: [],
+            newColumn1: '',
+            newColumn2: '',
 
             // 栏目
             column: '',
@@ -96,7 +153,25 @@ export default {
             // 内容md语法渲染
             html: '',
             // 新标签数组
-            diff: []
+            diff: [],
+
+            gridData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }]
         }
     },
     watch: {
@@ -155,6 +230,16 @@ export default {
         }
     },
     methods: {
+        fetchCatalog(){
+          this.$http.post(this.hostRequest.checkCatalogs_backup).then(
+              res => {
+                  if(res.status == 200){
+                      this.catalogs = res.data.data;
+                      this.newCatalogs = res.data.data;
+                  }
+              }
+          )
+        },
         markedToHTML(ctx){
             // this.$initHighlight()
             var rendererMD = new marked.Renderer();
@@ -194,68 +279,97 @@ export default {
             var that = this;
             const h = this.$createElement;
             this.$msgbox({
-            title: '发布操作',
-            message: h('p', null, '你确定要发布么？'),
-            showCancelButton: true,
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            beforeClose: (action, instance, done) => {
-                if (action === 'confirm') {
-                    // 点击确定
-                    instance.confirmButtonLoading = true;
-                    instance.confirmButtonText = '执行中...';
+              title: '发布操作',
+              message: h('p', null, '你确定要发布么？'),
+              showCancelButton: true,
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              beforeClose: (action, instance, done) => {
+                  if (action === 'confirm') {
+                      // 点击确定
+                      instance.confirmButtonLoading = true;
+                      instance.confirmButtonText = '执行中...';
 
-                    // 更新该栏目下的新标签
-                    that.$http.post(this.hostRequest.updateTags_backup, {
-                        column: that.column,
-                        tags: that.diff
-                    }).then(res => {
-                        if(res.status == 200){
-                            console.log('插入成功');
-                            if(res.data.code == '40001'){
-                                // 如果更新标签成功，则开始对文章进行发布
+                      // 更新该栏目下的新标签
+                      that.$http.post(this.hostRequest.updateTags_backup, {
+                          column: that.column,
+                          tags: that.diff
+                      }).then(res => {
+                          if(res.status == 200){
+                              console.log('插入成功');
+                              if(res.data.code == '40001'){
+                                  // 如果更新标签成功，则开始对文章进行发布
 
-                                // 先将二级标签格式化为数据库格式
-                                var newTag = that.tag.join(',');
-                                // 向服务器发送请求
-                                that.$http.post(this.hostRequest.release_backup, {
-                                    title: that.title,
-                                    summary: that.summary,
-                                    content: that.content,
-                                    column: that.column,
-                                    tags: newTag
-                                }).then(
-                                    res => {
-                                        if(res.status == 200){
-                                            if(res.data.code == '40001'){
-                                                done();
-                                                instance.confirmButtonLoading = false;
-                                            }
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    })
-
-                    // setTimeout(() => {
-                    //     done();
-                    //     setTimeout(() => {
-                    //     instance.confirmButtonLoading = false;
-                    //     }, 300);
-                    // }, 3000);
-                } else {
-                    console.log('取消了');
-                    done();
-                    instance.confirmButtonLoading = false;
-                }
-            }
+                                  // 先将二级标签格式化为数据库格式
+                                  var newTag = that.tag.join(',');
+                                  // 向服务器发送请求
+                                  that.$http.post(this.hostRequest.release_backup, {
+                                      title: that.title,
+                                      summary: that.summary,
+                                      content: that.content,
+                                      column: that.column,
+                                      tags: newTag
+                                  }).then(
+                                      res => {
+                                          if(res.status == 200){
+                                              if(res.data.code == '40001'){
+                                                  done();
+                                                  instance.confirmButtonLoading = false;
+                                              }
+                                          }
+                                      }
+                                  )
+                              }
+                          }
+                      });
+                  } else {
+                      console.log('取消了');
+                      done();
+                      instance.confirmButtonLoading = false;
+                  }
+              }
             }).then(action => {
                 this.$message({
                     type: 'info',
-                    message: 'action: ' + action
+                    message: '发布成功_' + action
                 });
             });
+        },
+        createCatalog(idx){
+          if (idx == 1) {
+            var req = {
+              catalog: this.newCatalog1,
+              column: this.newColumn1
+            }
+          }else {
+            var req = {
+              catalog: this.newCatalog2,
+              column: this.newColumn2
+            }
+          }
+          console.log(req);
+          this.$confirm('此操作会更新栏目, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.post(this.hostRequest.createCatalog, req).then(
+              res => {
+                if (res.status == 200) {
+                  this.fetchCatalog();
+                  this.$message({
+                    type: 'success',
+                    message: '提交成功!'
+                  });
+                }
+              }
+            );
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消提交'
+            });
+          });
         }
     }
 }
@@ -302,5 +416,11 @@ export default {
 }
 .release-btn{
     margin-top: 20px;
+}
+.popover-title{
+  margin: 10px 0;
+}
+.popover-select{
+  width: 100%;
 }
 </style>

@@ -19,7 +19,7 @@
               </el-col>
               <el-col :span="24">
                 <div class="grid-content bg-purple-dark article">
-                    {{item.summary}}
+                    {{item.summary}}...
                 </div>
               </el-col>
               <el-col :span="24">
@@ -104,6 +104,8 @@ export default {
 }
 h2{
     margin-bottom: 0;
+    font-weight: normal;
+    color: #333;
 }
 .tag{
     margin-top: 10px;
@@ -111,6 +113,7 @@ h2{
 }
 .article{
     margin-bottom: 20px;
+    font-size: 14px;
 }
 .articlelist-pagination{
     margin-top: 20px;

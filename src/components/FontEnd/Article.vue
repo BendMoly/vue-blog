@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="article">
         <el-row>
           <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <h2>{{title}}</h2>
-                <p>Posted on {{time}}</p>
+                <h2 class="article-title">{{title}}</h2>
+                <p class="article-time">Posted on {{time}}</p>
               </div>
           </el-col>
         </el-row>
@@ -17,7 +17,6 @@
         </el-row>
         <el-row class="content">
           <el-col :span="24">
-
               <div v-html="html"></div>
           </el-col>
         </el-row>
@@ -93,7 +92,7 @@ export default {
           this.column = res.data.data.column;
           this.tags = res.data.data.tag;
           this.content = res.data.data.content;
-
+          this.markedToHTML(this.content);
           // 判断该文章是否有评论，有的话则请求评论内容
           if(res.data.data.review == 'true'){
             this.$http.post(this.hostRequest.review_api).then(res => {
@@ -105,17 +104,8 @@ export default {
               }
             })
           }
-
         }
       })
-    },
-    watch: {
-      $route(to){
-        console.log(to);
-      },
-      content:{handler(curval,oldVal){
-          this.markedToHTML(curval);
-      },deep:true}
     },
     methods: {
       onSubmit() {
@@ -179,6 +169,16 @@ export default {
 <style scoped>
 .el-tag{
     margin-right: 5px;
+}
+.article{
+  margin-bottom: 50px;
+}
+.article-title{
+  margin-bottom: 0;
+  font-weight: normal;
+}
+.article-time{
+  margin-top: 0;
 }
 input{
     width: 100px !important;

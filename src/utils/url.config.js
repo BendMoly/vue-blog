@@ -10,5 +10,6 @@ export let urlList = {
   'article_api': '/api/article',
   'review_api': '/api/review',
   'articleList_api': '/api/articleList',
-  'catalogs_api': '/api/catalogs'
+  'catalogs_api': '/api/catalogs',
+  'createCatalog': '/backup/createCatalog'
 }

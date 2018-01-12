@@ -19,9 +19,9 @@
                     <h1>MolyCHN`s personal blogger</h1>
                     <p>All my learning experience will be summarized here, including programming, language, painting and writing</p>
                     <h2>Contact me</h2>
-                    <p>GitHub: <a class="github" href="https://github.com/BendMoly">https://github.com/BendMoly</a></p>
-                    <p>Email: ssomkhyy@qq.com</p>
-                    <p>QQ: 170849261</p>
+                    <p><img class="personal-icon" src="../../assets/icon_github.png" /><a class="github" href="https://github.com/BendMoly">https://github.com/BendMoly</a></p>
+                    <p><img class="personal-icon" src="../../assets/icon_email.png" />ssomkhyy@qq.com</p>
+                    <p><img class="personal-icon" src="../../assets/icon_wechat.png" />Lcy_170849261</p>
                   </div>
                 </div>
               </el-col>
@@ -73,6 +73,14 @@
   position: absolute;
   top: 25px;
   left: 75px;
+}
+.personal-info *{
+  margin-top: 0;
+}
+.personal-icon{
+  width: 30px;
+  vertical-align: middle;
+  margin-right: 10px;
 }
 .github{
   color: #ffffff;

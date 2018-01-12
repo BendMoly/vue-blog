@@ -3,7 +3,15 @@
         <div class="nav-container-bg"></div>
         <el-col :span="24">
             <h5><router-link to="/admin">Admin</router-link></h5>
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark" router>
+            <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            theme="dark"
+            background-color="#324157"
+            text-color="#fff"
+            router>
                 <el-menu-item index="/admin/dashboard">Dashboard</el-menu-item>
                 <el-menu-item index="/admin/adminarticlelist">ArticleList</el-menu-item>
                 <el-menu-item index="/admin/release">Release</el-menu-item>
@@ -34,6 +42,9 @@ export default {
 </script>
 
 <style scoped>
+.el-menu{
+  border: none;
+}
 h5{
     text-align: center;
 }
